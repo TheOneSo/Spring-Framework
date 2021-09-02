@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.oneso</groupId>
+	<artifactId>spring-hw</artifactId>
+	<version>1.0-SNAPSHOT</version>
+
+	<description>Spring Framework</description>
+	<developers>
+		<developer>
+			<name>Sergey</name>
+		</developer>
+	</developers>
+
+	<properties>
+		<!-- region General -->
+		<java.version>11</java.version>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+		<minimal.java.version>${java.version}</minimal.java.version>
+		<minimal.maven.version>3.6.3</minimal.maven.version>
+		<!-- endregion -->
+
+		<!-- region BOMs -->
+		<spring-boot-dependencies.version>2.5.4</spring-boot-dependencies.version>
+		<!-- endregion -->
+
+		<!-- region Libs -->
+		<!-- endregion -->
+
+		<!-- region Tests -->
+		<!-- endregion -->
+
+		<!-- region Plugins -->
+		<maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
+		<maven-assembly-plugin.version>3.1.1</maven-assembly-plugin.version>
+		<!-- endregion -->
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>${spring-boot-dependencies.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<packaging>pom</packaging>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-enforcer-plugin</artifactId>
+					<version>${maven-enforcer-plugin.version}</version>
+					<executions>
+						<execution>
+							<id>enforce-java-maven</id>
+							<goals>
+								<goal>enforce</goal>
+							</goals>
+							<configuration>
+								<rules>
+									<dependencyConvergence/>
+									<requireJavaVersion>
+										<version>${minimal.java.version}</version>
+									</requireJavaVersion>
+									<requireMavenVersion>
+										<version>${minimal.maven.version}</version>
+									</requireMavenVersion>
+								</rules>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>${maven-assembly-plugin.version}</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+</project>
