@@ -6,7 +6,7 @@
 
 	<groupId>com.oneso</groupId>
 	<artifactId>spring-hw</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0</version>
 
 	<description>Spring Framework</description>
 	<developers>
@@ -14,6 +14,10 @@
 			<name>Sergey</name>
 		</developer>
 	</developers>
+
+	<modules>
+		<module>quiz</module>
+	</modules>
 
 	<properties>
 		<!-- region General -->
@@ -29,9 +33,12 @@
 		<!-- endregion -->
 
 		<!-- region Libs -->
+		<spring-context.version>5.3.9</spring-context.version>
+		<opencsv.version>5.5.1</opencsv.version>
 		<!-- endregion -->
 
 		<!-- region Tests -->
+		<junit-jupiter.version>5.7.2</junit-jupiter.version>
 		<!-- endregion -->
 
 		<!-- region Plugins -->
@@ -48,6 +55,28 @@
 				<version>${spring-boot-dependencies.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>${spring-context.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.opencsv</groupId>
+				<artifactId>opencsv</artifactId>
+				<version>${opencsv.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-api</artifactId>
+				<version>${junit-jupiter.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-engine</artifactId>
+				<version>${junit-jupiter.version}</version>
+				<scope>test</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -82,6 +111,7 @@
 					</executions>
 				</plugin>
 				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-assembly-plugin</artifactId>
 					<version>${maven-assembly-plugin.version}</version>
 				</plugin>
