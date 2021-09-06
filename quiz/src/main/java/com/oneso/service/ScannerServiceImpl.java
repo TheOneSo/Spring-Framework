@@ -10,10 +10,12 @@ public class ScannerServiceImpl implements ScannerService {
 		this.scanner = new Scanner(System.in);
 	}
 
+	@Override
 	public String scanAnswer() {
 		return scanner.nextLine().trim();
 	}
 
+	@Override
 	public void closeScanner() {
 		scanner.close();
 	}

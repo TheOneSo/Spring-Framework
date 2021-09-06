@@ -1,7 +1,6 @@
 package com.oneso.dao;
 
 import com.oneso.domain.Quiz;
-import com.oneso.exceptions.DaoException;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import org.slf4j.Logger;
@@ -21,34 +20,48 @@ import java.util.Map;
 public class QuizDaoImpl implements QuizDao {
 
 	private static final Logger LOG = LoggerFactory.getLogger(QuizDaoImpl.class);
-	private final Quiz quiz;
 
-	public QuizDaoImpl(String resources) throws DaoException {
+	private final String resources;
+	private Quiz quiz;
+
+	public QuizDaoImpl(String resources) {
+		this.resources = resources;
+	}
+
+	@Override
+	public Quiz getQuiz() {
+		if(quiz != null) {
+			quiz.getQuizAsMap().keySet().forEach(s -> System.out.println(s));
+			return quiz;
+		}
+
+		quiz = new Quiz();
+		parseCSVAsQuiz();
+		return quiz;
+	}
+
+	private void parseCSVAsQuiz() {
 		URL url = QuizDaoImpl.class.getClassLoader().getResource(resources);
 		if (url == null) {
 			LOG.error("CSV file is not found");
-			throw new DaoException("CSV file is not found");
-		}
-
-		if(url.getProtocol().equals("jar")) {
-			InputStream in = getClass().getResourceAsStream("/" + resources);
-			if(in == null) {
-				LOG.error("CSV file is not found");
-				throw new DaoException("CSV file is not found");
-			}
-
-			try(BufferedReader br = new BufferedReader(new InputStreamReader(in));) {
-				quiz = new Quiz(readCsv(br));
-			} catch (IOException | CsvValidationException | ArrayIndexOutOfBoundsException e) {
-				LOG.error("CSV file is unreadable");
-				throw new DaoException("CSV file is unreadable", e);
-			}
 		} else {
-			try(BufferedReader reader = Files.newBufferedReader(Paths.get(url.toURI()))) {
-				quiz = new Quiz(readCsv(reader));
-			} catch (IOException | CsvValidationException | URISyntaxException | ArrayIndexOutOfBoundsException e) {
-				LOG.error("CSV file is unreadable");
-				throw new DaoException("CSV file is unreadable", e);
+			if(url.getProtocol().equals("jar")) {
+				InputStream in = getClass().getResourceAsStream("/" + resources);
+				if(in == null) {
+					LOG.error("CSV file is not found");
+				} else {
+					try(BufferedReader br = new BufferedReader(new InputStreamReader(in));) {
+						quiz.addQA(readCsv(br));
+					} catch (IOException | CsvValidationException | ArrayIndexOutOfBoundsException e) {
+						LOG.error("CSV file is unreadable");
+					}
+				}
+			} else {
+				try(BufferedReader reader = Files.newBufferedReader(Paths.get(url.toURI()))) {
+					quiz.addQA(readCsv(reader));
+				} catch (IOException | CsvValidationException | URISyntaxException | ArrayIndexOutOfBoundsException e) {
+					LOG.error("CSV file is unreadable");
+				}
 			}
 		}
 	}
@@ -64,10 +77,5 @@ public class QuizDaoImpl implements QuizDao {
 			}
 		}
 		return out;
-	}
-
-	@Override
-	public Quiz getQuiz() {
-		return quiz;
 	}
 }

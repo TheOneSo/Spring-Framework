@@ -14,6 +14,7 @@ public class QuizServiceImpl implements QuizService {
 		this.scannerService = scannerService;
 	}
 
+	@Override
 	public void startQuiz() {
 		if(user.isEmpty()) {
 			welcomeNewUser();

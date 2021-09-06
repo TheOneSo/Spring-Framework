@@ -1,6 +1,5 @@
 package com.oneso.dao;
 
-import com.oneso.exceptions.DaoException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -13,20 +12,24 @@ class QuizDaoImplTest {
 	private static final String INCORRECT_CSV_PATH = "csv/failCSVTest.csv";
 
 	@Test
-	@DisplayName("should get exception if path to csv is incorrect")
-	void getExceptionWithIncorrectPathToCSV() {
-		assertThrows(DaoException.class, () -> new QuizDaoImpl("123"));
+	@DisplayName("shouldn't read csv if file is not correct")
+	void getEmptyQuizIfFileIsNotCorrect() {
+		QuizDao quizDao = new QuizDaoImpl(INCORRECT_CSV_PATH);
+
+		assertTrue(quizDao.getQuiz().getQuizAsMap().isEmpty());
 	}
 
 	@Test
-	@DisplayName("should get exception is csv is incorrect")
-	void getExceptionFromIncorrectCSV() {
-		assertThrows(DaoException.class, () -> new QuizDaoImpl(INCORRECT_CSV_PATH));
+	@DisplayName("should get an empty quiz with incorrect path to file")
+	void getEmptyQuizWithIncorrectPathToFile() {
+		QuizDao quizDao = new QuizDaoImpl("123");
+
+		assertTrue(quizDao.getQuiz().getQuizAsMap().isEmpty());
 	}
 
 	@Test
 	@DisplayName("should create new Quiz")
-	void createNewQuiz() throws DaoException {
+	void createNewQuiz() {
 		QuizDao quizDao = new QuizDaoImpl(CORRECT_CSV_PATH);
 
 		assertEquals("1", quizDao.getQuiz().getQuizAsMap().get("test1").trim());
