@@ -8,7 +8,8 @@ public class Quiz {
 
 	private final Map<String, String> qa = new HashMap<>();
 
-	public Quiz() {}
+	public Quiz() {
+	}
 
 	public Quiz(Map<String, String> questionsAndAnswers) {
 		qa.putAll(questionsAndAnswers);

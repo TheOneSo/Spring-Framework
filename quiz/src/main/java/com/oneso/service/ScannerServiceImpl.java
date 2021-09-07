@@ -1,13 +1,16 @@
 package com.oneso.service;
 
+import org.springframework.stereotype.Service;
+
 import java.util.Scanner;
 
+@Service("scannerService")
 public class ScannerServiceImpl implements ScannerService {
 
 	private final Scanner scanner;
 
-	public ScannerServiceImpl() {
-		this.scanner = new Scanner(System.in);
+	public ScannerServiceImpl(Scanner scanner) {
+		this.scanner = scanner;
 	}
 
 	@Override
