@@ -5,6 +5,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,6 +18,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
+@Repository("quizDao")
 public class QuizDaoImpl implements QuizDao {
 
 	private static final Logger LOG = LoggerFactory.getLogger(QuizDaoImpl.class);
@@ -30,8 +32,7 @@ public class QuizDaoImpl implements QuizDao {
 
 	@Override
 	public Quiz getQuiz() {
-		if(quiz != null) {
-			quiz.getQuizAsMap().keySet().forEach(s -> System.out.println(s));
+		if (quiz != null) {
 			return quiz;
 		}
 
@@ -45,19 +46,19 @@ public class QuizDaoImpl implements QuizDao {
 		if (url == null) {
 			LOG.error("CSV file is not found");
 		} else {
-			if(url.getProtocol().equals("jar")) {
+			if (url.getProtocol().equals("jar")) {
 				InputStream in = getClass().getResourceAsStream("/" + resources);
-				if(in == null) {
+				if (in == null) {
 					LOG.error("CSV file is not found");
 				} else {
-					try(BufferedReader br = new BufferedReader(new InputStreamReader(in));) {
+					try (BufferedReader br = new BufferedReader(new InputStreamReader(in));) {
 						quiz.addQA(readCsv(br));
 					} catch (IOException | CsvValidationException | ArrayIndexOutOfBoundsException e) {
 						LOG.error("CSV file is unreadable");
 					}
 				}
 			} else {
-				try(BufferedReader reader = Files.newBufferedReader(Paths.get(url.toURI()))) {
+				try (BufferedReader reader = Files.newBufferedReader(Paths.get(url.toURI()))) {
 					quiz.addQA(readCsv(reader));
 				} catch (IOException | CsvValidationException | URISyntaxException | ArrayIndexOutOfBoundsException e) {
 					LOG.error("CSV file is unreadable");
@@ -72,7 +73,7 @@ public class QuizDaoImpl implements QuizDao {
 
 		String[] next;
 		while ((next = csvReader.readNext()) != null) {
-			if(next[0] != null && next[1] != null) {
+			if (next[0] != null && next[1] != null) {
 				out.put(next[0], next[1]);
 			}
 		}
